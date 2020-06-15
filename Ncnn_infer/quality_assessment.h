@@ -91,10 +91,12 @@ class QualityAssessment {
      * 							            Relative ordinates to @see face_rect.
      * 							            Format as [x, x, x, ..., y, y, y, ...].
      * @param landmarks_len[in]	Number of landmarks.
-     * @return 					        Score of blurness.
+     * @return float					  Score of blurness.
      * 		   					          The smaller score means more blur.
-     * @note					          The magic number 32 * 32 is for normalizing
-     * 							            the number of pixels when calculating.
+     * @note					          The magic number
+     *                          @see QualityAssessment::kExpectedPixels is for 
+     *                          normalizing the number of pixels when 
+     *                          calculating.
      * 							            In cv::resize(), cv::INTER_NEAREST maybe not
      * 							            the best choice.
      */
@@ -103,8 +105,8 @@ class QualityAssessment {
 
     /**
      * @brief	Loading file line by line.
-     * @param file[in] Path to read file.
-     * @return         Save lines in std::vector<std::string>.
+     * @param file[in]                  Path to read file.
+     * @return std::vector<std::string> Save lines in std::vector<std::string>.
      */
     static std::vector<std::string> ReadTxt(const std::string file);
 
@@ -145,7 +147,7 @@ class QualityAssessment {
      * 							            Relative ordinates to @see face_rect.
      * 							            Format as [x, x, x, ..., y, y, y, ...].
      * @param landmarks_len[in]	Number of landmarks.
-     * @return 					        Minimum rectangle containing all landmarks
+     * @return cv::Rect	        Minimum rectangle containing all landmarks
      * 							            with absolute ordinates to oriImage.
      */
     cv::Rect GetRoi(const cv::Mat &origin_image, const cv::Rect &face_rect,
