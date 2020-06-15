@@ -24,21 +24,27 @@
 
 # pragma once
 
-#include "fp.mem.h"
-#include "fp.id.h"
+#include "quality_assessment.mem.h"
+#include "quality_assessment.id.h"
 #include <opencv2/opencv.hpp>
 #include <time.h>
 #include "net.h"
 #include "mat.h"
 
 namespace hiar_impl {
-namespace frontal_profile_faces {
+namespace face {
 
 /**
  * @brief Distinguish frontal and profile faces by wrapping Tencent-Ncnn.
  */
-class Classifer {
+class QualityAssessment {
   public:
+    /// Ratio of expansion for area where doing blur detecting.
+    const float kExpandingRatio = 1.2;
+    /// Minimum number of landmarks roi's pixels.
+    const int kExpectedPixels = 32 * 32;
+    /// Whether to record time-cost.
+    const bool kIsRecording = false;
     /// Minimum width of inputing image.
     const int kTargetWidth = 48;
     /// Minimum height of inputing image.
@@ -47,15 +53,15 @@ class Classifer {
     const float kNormVals[3] = {1 / 255.0f, 1 / 255.0f, 1 / 255.0f};
 
     /**
-     * @brief Construct a new Classifer object.
+     * @brief Construct a new QualityAssessment object.
      */
-    Classifer();
+    QualityAssessment();
 
     /**
-     * @brief Destroy the Classifer object.
+     * @brief Destroy the QualityAssessment object.
      * @remark Release the resource of Ncnn.
      */
-    ~Classifer();
+    ~QualityAssessment();
 
     /**
      * @brief Distinguish the face.
@@ -69,12 +75,31 @@ class Classifer {
 
     /**
      * @brief Get the cost of single predict by millsecond.
-     *        @see Classifer::Predict
+     *        @see QualityAssessment::Predict
      * 
      * @param prepare_cost[in, out] Time cost for preparing data. 
      * @param infer_cost[in, out]   Time cost for inferring.
      */
     void GetCostMs(double &prepare_cost, double &infer_cost);
+
+    /**
+     * @brief Get blurness of roi.
+     * @param origin_image[in]  Original image.
+     * @param face_rect[in] 		The rectangle with absolute ordinates
+     *                          to oriImage. All landmarks in this rectangle.
+     * @param landmarks[in]		  Float array contains landmarks.
+     * 							            Relative ordinates to @see face_rect.
+     * 							            Format as [x, x, x, ..., y, y, y, ...].
+     * @param landmarks_len[in]	Number of landmarks.
+     * @return 					        Score of blurness.
+     * 		   					          The smaller score means more blur.
+     * @note					          The magic number 32 * 32 is for normalizing
+     * 							            the number of pixels when calculating.
+     * 							            In cv::resize(), cv::INTER_NEAREST maybe not
+     * 							            the best choice.
+     */
+    float GetBlurScore(const cv::Mat &origin_image, const cv::Rect &face_rect,
+                       float* landmarks, int landmarks_len);
 
     /**
      * @brief	Loading file line by line.
@@ -110,6 +135,28 @@ class Classifer {
      * @note There are several pre-processes in the function.
      */
     ncnn::Mat ConvertOneImage(const cv::Mat& image);
+
+    /**
+     * @brief Get the minimum rectangle containing landmarks.
+     * @param origin_image[in]  Original image.
+     * @param face_rect[in]		  The rectangle with absolute ordinates
+     *                          to oriImage. All landmarks in this rectangle.
+     * @param landmarks[in]		  Float array contains landmarks.
+     * 							            Relative ordinates to @see face_rect.
+     * 							            Format as [x, x, x, ..., y, y, y, ...].
+     * @param landmarks_len[in]	Number of landmarks.
+     * @return 					        Minimum rectangle containing all landmarks
+     * 							            with absolute ordinates to oriImage.
+     */
+    cv::Rect GetRoi(const cv::Mat &origin_image, const cv::Rect &face_rect,
+				            float* landmarks, int landmarks_len);
+
+    /**
+     * @brief Expanding rectangle with fixed center.
+     * @param rect[in, out] Rectangle for modifing @see cv::Rect.
+     * @param ratio[in]     Expanding ratio to each edge.
+     */
+    void RectCenterScale(cv::Rect &rect, const float ratio);
 
     /// Saving the model data.
     ncnn::Net net_;

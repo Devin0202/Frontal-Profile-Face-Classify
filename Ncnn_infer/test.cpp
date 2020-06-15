@@ -1,6 +1,6 @@
-#include "fp.h"
+#include "quality_assessment.h"
 
-using namespace hiar_impl::frontal_profile_faces;
+using namespace hiar_impl::face;
 
 int main() {
   int error = 0;
@@ -18,9 +18,9 @@ int main() {
                                        true);
   std::pair<std::string, bool> profile("/home/devin/MyTmp/Pytmp/nPcList.txt",
                                        false);
-  std::pair<std::string, bool> used = frontal_hard;
-  Classifer instance = Classifer();
-  std::vector<std::string> imageList = Classifer::ReadTxt(used.first);
+  std::pair<std::string, bool> used = frontal;
+  QualityAssessment instance = QualityAssessment();
+  std::vector<std::string> imageList = QualityAssessment::ReadTxt(used.first);
 
   for (auto imageName : imageList) {
       if ("" != imageList.at(0)) {
@@ -44,15 +44,15 @@ int main() {
   std::cout << "Error rate: " << float(error) / imageList.size() << std::endl;
   std::cout << "Average time: "
             << (prepare_cost_total + infer_cost_total) / imageList.size()
-            << "ms"
+            << " ms"
             << std::endl;
   std::cout << "Prepare time: "
             << prepare_cost_total / imageList.size()
-            << "ms"
+            << " ms"
             << std::endl;
   std::cout << "Infer time: "
             << infer_cost_total / imageList.size()
-            << "ms"
+            << " ms"
             << std::endl;
   return 0;
 }
