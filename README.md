@@ -1,3 +1,3 @@
 # Frontal-Profile Face Classify
-Python3
-Tensorflow
+1. Python 3.7.7
+2. Tensorflow 2.2
