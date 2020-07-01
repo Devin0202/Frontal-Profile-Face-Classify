@@ -89,11 +89,11 @@ def traversFilesInDir(fSrcRoot, fBlackList=[]):
         sys.exit(0)
     return rtv
 
-tfModelFile = "tmp/2020060910" + os.path.sep
-# dataDir = "/home/devin/MyGit/TfLab/FrontalProfileFace/Data/TestData"
-# """Load tensorflow model"""
-# subprocess.run(["python", "-m", "tf2onnx.convert", "--saved-model", \
-#                 tfModelFile, "--output", tfModelFile + "model.onnx",  "--inputs", "input_1:0[1, 3, 48, 48]", "--inputs-as-nchw", "input_1:0"])
+tfModelFile = "tmp/2020061710" + os.path.sep
+dataDir = "/home/devin/MyGit/TfLab/FrontalProfileFace/Data/TestData"
+"""Load tensorflow model"""
+subprocess.run(["python", "-m", "tf2onnx.convert", "--saved-model", \
+                tfModelFile, "--output", tfModelFile + "fp.onnx",  "--inputs", "input_1:0[1, 3, 48, 48]", "--inputs-as-nchw", "input_1:0"])
 
 testList = traversFilesInDir("/home/devin/MyGit/TfLab/FrontalProfileFace/Data/TestData/1")
 sess_ort = ort.InferenceSession(tfModelFile + "fp.onnx")

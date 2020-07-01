@@ -11,14 +11,11 @@ int main() {
   double infer_cost_total = 0;
   bool rtv = false;
 
-  std::pair<std::string, bool> frontal_hard(
-                                    "/home/devin/MyTmp/Pytmp/hard_pPcList.txt",
-                                    true);
   std::pair<std::string, bool> frontal("/home/devin/MyTmp/Pytmp/pPcList.txt",
                                        true);
   std::pair<std::string, bool> profile("/home/devin/MyTmp/Pytmp/nPcList.txt",
                                        false);
-  std::pair<std::string, bool> used = frontal;
+  std::pair<std::string, bool> used = profile;
   QualityAssessment instance = QualityAssessment();
   std::vector<std::string> imageList = QualityAssessment::ReadTxt(used.first);
 

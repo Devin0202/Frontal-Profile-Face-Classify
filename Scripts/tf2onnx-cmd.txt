@@ -1,2 +1,0 @@
-python -m tf2onnx.convert --saved-model . --output model.onnx --inputs-as-nchw input_1:0 --fold_const
---inputs input_1:0[1,48,48,3]

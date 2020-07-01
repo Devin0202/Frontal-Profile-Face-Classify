@@ -19,9 +19,9 @@ print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('
 # print(c)
 
 
-batchS = 32
+batchS = 64
 dataResize = (48, 48)
-eps = 50
+eps = 30
 dataDir = "/home/devin/MyGit/TfLab/FrontalProfileFace/Data/TrainData"
 
 class SiameseNet(Model):
@@ -33,18 +33,26 @@ class SiameseNet(Model):
         # CNN-encoder
         self.encoder = tf.keras.Sequential([
             Conv2D(filters=8, kernel_size=3, padding='valid'),
+            # Dropout(0.3),
+            # BatchNormalization(epsilon=0.0001, center=False, scale=False),
             ReLU(),
             MaxPool2D((2, 2)),
 
             Conv2D(filters=12, kernel_size=3, padding='valid'),
+            # Dropout(0.3),
+            # BatchNormalization(epsilon=0.0001, center=False, scale=False),
             ReLU(),
             MaxPool2D((2, 2)),
 
             Conv2D(filters=16, kernel_size=3, padding='valid'),
+            # Dropout(0.3),
+            # BatchNormalization(epsilon=0.0001, center=False, scale=False),
             ReLU(),
             MaxPool2D((2, 2)),
 
             Conv2D(filters=16, kernel_size=2, padding='valid'),
+            # Dropout(0.3),
+            # BatchNormalization(epsilon=0.0001, center=False, scale=False),
             ReLU(),
 
             Flatten(),
@@ -90,4 +98,4 @@ history = model.fit(
     epochs=eps, \
     validation_data=valData
 )
-model.save("../tmp/20200060910")
+model.save("../tmp/2020061710")

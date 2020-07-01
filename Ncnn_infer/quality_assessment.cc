@@ -138,6 +138,7 @@ std::vector<std::string> QualityAssessment::ReadTxt(const std::string file) {
     infile.close();
   } else {
     std::cout << "Loading file failed !!!" << std::endl;
+    std::cout << file << std::endl;
     assert(false);
   }
   return rtv;

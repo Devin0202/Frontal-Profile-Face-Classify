@@ -143,6 +143,8 @@ def makeSquare(src, edge, isColor):
                         cv2.imwrite(i, mat)
                         # cv2.imshow("show", mat)
                         # cv2.waitKey()
+                        print("rectangle")
+                        print(i)
                     elif 0 > diff:
                         diff = -diff
                         half = diff // 2 
@@ -150,6 +152,8 @@ def makeSquare(src, edge, isColor):
                         cv2.imwrite(i, mat)
                         # cv2.imshow("show", mat)
                         # cv2.waitKey()
+                        print("rectangle")
+                        print(i)
                     else:
                         pass
         return
@@ -158,7 +162,7 @@ def makeSquare(src, edge, isColor):
 if "__main__" == __name__:
     globalT0 = globalStart()
 ### Parameters region
-    src = "/home/devin/MyGit/TfLab/FrontalProfileFace/Data/f1"
+    src = "/home/devin/MyGit/TfLab/FrontalProfileFace/Data/TrainData/1"
 ### Job region
     makeSquare(src, 48, True)
 
